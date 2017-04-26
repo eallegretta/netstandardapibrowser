@@ -1,0 +1,78 @@
+<html>
+	<head>
+	</head>
+	<body>
+		<select id="versions"></select>
+		<input type="text" id="search" />
+		<div id="results"></div>
+		<script>
+			function getJSON(url, success){
+				var request = new XMLHttpRequest();
+				request.open('GET', url, true);
+
+				request.onload = function() {
+					if (request.status >= 200 && request.status < 400) {
+						success(JSON.parse(request.responseText));
+					} 
+				}
+				
+				request.send();
+			}
+			
+			getJSON('index.json', loadApi);
+			
+			var api = {};
+			
+			function loadApi(apiData) {
+				api = apiData;
+				var versionsSelect = document.getElementById('versions')	
+					
+				for(var key in api){
+					var option = document.createElement('option')
+					option.value = key;
+					option.text = key;
+					versionsSelect.appendChild(option);
+				}
+			}
+			
+			document.getElementById('search').onkeyup = function(){
+				performSearch(this.value);
+			}
+			
+			document.getElementById('versions').onchange = function() {
+				performSearch(document.getElementById('search').value);
+			}
+			
+			function performSearch(text) {
+				var resultsDiv = document.getElementById('results');
+				resultsDiv.innerHTML = '';
+				
+				if(!text || text.length == 0){
+					return;
+				}
+			
+				var version = document.getElementById('versions').value;
+				var types = api[version].AllTypes;
+				
+				var results = '';
+				
+				for(var index = 0; index < types.length; index++){
+					var type = types[index];
+					
+					if(type.Name.startsWith(text)){
+						results += type.FullTypeName + '<br />';
+					}
+				}
+				
+				if(results.length == 0) {
+					resultsDiv.innerHTML = 'No types found';
+				}
+				else{
+					resultsDiv.innerHTML = results;
+				}
+				
+			}
+			
+		</script>
+	</body>
+</html>
