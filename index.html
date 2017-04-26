@@ -188,7 +188,7 @@
 				for(var index = 0; index < types.length; index++){
 					var type = types[index];
 					
-					if(type.Name.startsWith(text)){
+					if(type.Name.toLowerCase().startsWith(text.toLowerCase())){
 						results += type.FullTypeName + '<br />';
 					}
 				}
@@ -219,7 +219,7 @@
 					for(var index = 0; index < types.length; index++){
 						var type = types[index];
 						
-						if(type.Name == text){
+						if(type.Name.toLowerCase() == text.toLowerCase()){
 							results[version] = true;
 						}
 					}
