@@ -140,16 +140,19 @@
 				var html = '<ul class="tree">';
 								
 				for(var key in api){
-					html += '<li><label for="version_' + key + '">' + key + '</label><input type="checkbox" id="version_' + key + '" />';
-					
 					var types = api[key].TypesByNamespace;
+					var namespacesCount = Object.keys(types).length;
+					
+					html += '<li><label for="version_' + key + '">' + key + ' ( ' + namespacesCount + ' namespaces )</label><input type="checkbox" id="version_' + key + '" />';
 					
 					html += '<ul class="hide">';
 					for(var namespace in types) {
-						html += '<li><label for="version_' + key + '_namespace_' + namespace + '">' + namespace + '</label><input type="checkbox" id="version_' + key + '_namespace_' + namespace + '" />';
+						var typesInNamespace = api[key].TypesByNamespace[namespace];
+						
+						html += '<li><label for="version_' + key + '_namespace_' + namespace + '">' + namespace + ' ( ' + typesInNamespace.length + ' types )</label><input type="checkbox" id="version_' + key + '_namespace_' + namespace + '" />';
 						html += '<ul class="hide">';
 						
-						var typesInNamespace = api[key].TypesByNamespace[namespace];
+						
 						for(index = 0; index < typesInNamespace.length; index++){
 							var type = typesInNamespace[index];
 							
