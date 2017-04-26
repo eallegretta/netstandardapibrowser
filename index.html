@@ -2,9 +2,17 @@
 	<head>
 	</head>
 	<body>
-		<select id="versions"></select>
-		<input type="text" id="search" />
-		<div id="results"></div>
+		<fieldset>
+			<legend>Search Type in Net Standard version</legend>
+			<select id="versions"></select>
+			<input type="text" id="search" />
+			<div id="results"></div>
+		</fieldset>
+		<fieldset>
+			<legend>Find NET Standard for Specific Type</legend>
+			<input type="text" id="searchSpecific" />
+			<div id="resultsSpecific"></div>
+		</fieldset>
 		<script>
 			function getJSON(url, success){
 				var request = new XMLHttpRequest();
@@ -39,6 +47,11 @@
 				performSearch(this.value);
 			}
 			
+			document.getElementById('searchSpecific').onkeyup = function(){
+				performSearchSpecific(this.value);
+			}
+			
+			
 			document.getElementById('versions').onchange = function() {
 				performSearch(document.getElementById('search').value);
 			}
@@ -72,6 +85,35 @@
 				}
 				
 			}
+			
+			function performSearchSpecific(text) {
+				var resultsDiv = document.getElementById('resultsSpecific');
+				resultsDiv.innerHTML = '';
+				
+				if(!text || text.length == 0){
+					return;
+				}
+				
+				var results = {};
+				
+			
+				for(var version in api){
+					var types = api[version].AllTypes;
+					
+					for(var index = 0; index < types.length; index++){
+						var type = types[index];
+						
+						if(type.Name == text){
+							results[version] = true;
+						}
+					}
+				}
+
+				for(var key in results){
+					resultsDiv.innerHTML += key + '<br />';
+				}
+			}
+			
 			
 		</script>
 	</body>
